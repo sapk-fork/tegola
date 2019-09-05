@@ -7,7 +7,8 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/arolek/algnhsa"
+	"github.com/akrylysov/algnhsa"
+
 	"github.com/go-spatial/geom/encoding/mvt"
 	"github.com/go-spatial/tegola/atlas"
 	"github.com/go-spatial/tegola/cmd/internal/register"
@@ -104,7 +105,10 @@ func main() {
 	// if it detects this in the response the payload will be base64 encoded. Lambda needs to be configured
 	// to handle binary responses so it can convert the base64 encoded payload back into binary prior
 	// to sending to the client
-	algnhsa.ListenAndServe(mux, []string{mvt.MimeType})
+	algnhsa.ListenAndServe(mux, &algnhsa.Options{
+		BinaryContentTypes: []string{mvt.MimeType},
+		UseProxyPath:       true,
+	})
 }
 
 // URLRoot overrides the default server.URLRoot function in order to include the "stage" part of the root
